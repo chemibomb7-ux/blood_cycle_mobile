@@ -40,7 +40,7 @@
 
         .paint-btn {
             background: #ffffff;
-            border: 2px solid #000000;
+            border: 2.5px solid #000000;
             box-shadow: 2px 2px 0px #000000;
             cursor: pointer;
             touch-action: none;
@@ -171,7 +171,7 @@
             </div>
         </section>
 
-        <!-- 3. 중앙: 대폭 확대된 초대형 정사각형 캔버스 (화면 너비 100% 꽉 채움) -->
+        <!-- 3. 중앙: 정사각형 캔버스 (화면 너비에 맞춰 자동 확장) -->
         <main class="flex-1 w-full flex items-center justify-center relative min-h-0 py-1 overflow-hidden">
             <canvas id="snakeCanvas" width="630" height="630" class="canvas-frame max-h-full max-w-full aspect-square object-contain"></canvas>
 
@@ -212,30 +212,30 @@
             </div>
         </main>
 
-        <!-- 4. 하단: 엄지 조작 최적화 콤팩트 키패드 (스와이프 + 탭 겸용) -->
-        <footer class="flex-none flex items-center justify-center pt-0.5 pb-0.5">
-            <div class="inline-grid grid-cols-3 grid-rows-3 gap-1 p-1 bg-gray-100 border-2 border-black rounded-lg shadow-[2px_2px_0px_#000]">
+        <!-- 4. 하단: 엄지 조작이 시원하게 편해진 대형 십자키패드 (가로·세로 대폭 확대) -->
+        <footer class="flex-none flex items-center justify-center pt-1 pb-1">
+            <div class="inline-grid grid-cols-3 grid-rows-3 gap-1.5 p-1.5 bg-gray-100 border-2 border-black rounded-xl shadow-[2px_2px_0px_#000]">
                 <!-- row 1 -->
                 <div></div>
-                <button id="btnUp" class="paint-btn w-13 h-10 sm:w-15 sm:h-11 text-2xl font-black flex items-center justify-center bg-white active:bg-yellow-200 rounded">
+                <button id="btnUp" class="paint-btn w-16 h-12 sm:w-20 sm:h-14 text-2xl sm:text-3xl font-black flex items-center justify-center bg-white active:bg-yellow-200 rounded-lg">
                     ▲
                 </button>
                 <div></div>
 
                 <!-- row 2 -->
-                <button id="btnLeft" class="paint-btn w-13 h-10 sm:w-15 sm:h-11 text-2xl font-black flex items-center justify-center bg-white active:bg-yellow-200 rounded">
+                <button id="btnLeft" class="paint-btn w-16 h-12 sm:w-20 sm:h-14 text-2xl sm:text-3xl font-black flex items-center justify-center bg-white active:bg-yellow-200 rounded-lg">
                     ◀
                 </button>
-                <div class="w-13 h-10 sm:w-15 sm:h-11 flex items-center justify-center font-bold text-gray-300 text-sm">
+                <div class="w-16 h-12 sm:w-20 sm:h-14 flex items-center justify-center font-bold text-gray-400 text-base">
                     ✚
                 </div>
-                <button id="btnRight" class="paint-btn w-13 h-10 sm:w-15 sm:h-11 text-2xl font-black flex items-center justify-center bg-white active:bg-yellow-200 rounded">
+                <button id="btnRight" class="paint-btn w-16 h-12 sm:w-20 sm:h-14 text-2xl sm:text-3xl font-black flex items-center justify-center bg-white active:bg-yellow-200 rounded-lg">
                     ▶
                 </button>
 
                 <!-- row 3 -->
                 <div></div>
-                <button id="btnDown" class="paint-btn w-13 h-10 sm:w-15 sm:h-11 text-2xl font-black flex items-center justify-center bg-white active:bg-yellow-200 rounded">
+                <button id="btnDown" class="paint-btn w-16 h-12 sm:w-20 sm:h-14 text-2xl sm:text-3xl font-black flex items-center justify-center bg-white active:bg-yellow-200 rounded-lg">
                     ▼
                 </button>
                 <div></div>
