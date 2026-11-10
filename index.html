@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>혈액순환 뱀게임 (모바일 세로 최적화)</title>
+    <title>혈액순환 뱀게임 (모바일 화면 극대화 뷰)</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&display=swap" rel="stylesheet">
@@ -34,13 +34,13 @@
         /* 크레파스/그림판 풍 테두리 & 버튼 */
         .paint-panel {
             background: #ffffff;
-            border: 4px solid #000000;
+            border: 3.5px solid #000000;
             box-shadow: 4px 4px 0px #000000;
         }
 
         .paint-btn {
             background: #ffffff;
-            border: 2.5px solid #000000;
+            border: 2px solid #000000;
             box-shadow: 2px 2px 0px #000000;
             cursor: pointer;
             touch-action: none;
@@ -61,7 +61,6 @@
             transform: translateZ(0);
         }
 
-        /* 모바일 최적화 하드웨어 가속 펄스 애니메이션 */
         @keyframes targetPulse {
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.06); }
@@ -72,68 +71,71 @@
         }
     </style>
 </head>
-<body class="w-full h-full p-2 flex flex-col items-center justify-center overflow-hidden">
+<body class="w-full h-full p-1.5 sm:p-2 flex flex-col items-center justify-center overflow-hidden">
 
-    <!-- 모바일 세로 뷰 메인 컨테이너 (스크롤 없음, 100dvh 화면 맞춤) -->
-    <div class="paint-panel w-full max-w-md h-full flex flex-col p-2 overflow-hidden justify-between">
+    <!-- 모바일 세로 뷰 메인 컨테이너 (100dvh 완전 맞춤, 캔버스 면적 극대화) -->
+    <div class="paint-panel w-full max-w-md h-full flex flex-col p-1.5 sm:p-2 overflow-hidden justify-between">
         
-        <!-- 1. 상단 헤더: 타이틀, 사운드/정지 제어, 실시간 순환 정보 -->
-        <header class="flex-none flex flex-col gap-1 pb-1.5 border-b-2 border-black">
-            <!-- 1열: 타이틀 + 주요 조작 버튼 -->
+        <!-- 1. 초슬림 상단 통합 헤더 (높이 최소화: 약 65px) -->
+        <header class="flex-none flex flex-col gap-1 pb-1 border-b-2 border-black">
+            <!-- 1열: 타이틀 + 3개 조작 버튼 -->
             <div class="flex items-center justify-between">
-                <div class="flex items-center gap-1.5">
-                    <span class="text-2xl">🩸</span>
-                    <span class="font-black text-lg sm:text-xl text-black tracking-tight">혈액순환 챌린지</span>
+                <div class="flex items-center gap-1 min-w-0">
+                    <span class="text-xl">🩸</span>
+                    <span class="font-black text-base sm:text-lg text-black tracking-tight truncate">혈액순환 챌린지</span>
                 </div>
 
-                <div class="flex items-center gap-1">
-                    <button id="soundToggle" class="paint-btn px-2 py-0.5 text-xs font-bold bg-white">
+                <div class="flex items-center gap-1 shrink-0">
+                    <button id="soundToggle" class="paint-btn px-1.5 py-0.5 text-xs font-bold bg-white">
                         🔊 소리 ON
                     </button>
-                    <button id="pauseBtn" class="paint-btn px-2 py-0.5 text-xs font-bold bg-white">
+                    <button id="pauseBtn" class="paint-btn px-1.5 py-0.5 text-xs font-bold bg-white">
                         ⏸ 일시정지
                     </button>
-                    <button id="restartHeaderBtn" class="paint-btn px-2 py-0.5 text-xs font-bold bg-pink-100 hover:bg-pink-200 text-red-700">
+                    <button id="restartHeaderBtn" class="paint-btn px-1.5 py-0.5 text-xs font-bold bg-pink-100 hover:bg-pink-200 text-red-700">
                         🔄 다시 시작
                     </button>
                 </div>
             </div>
 
-            <!-- 2열: 동맥/정맥 혈액 상태 뱃지 & 실시간 순환/길이 수치 -->
+            <!-- 2열: 동맥혈/정맥혈 뱃지 & 실시간 순환/길이 정보 -->
             <div class="flex items-center justify-between gap-1 text-xs">
-                <div id="bloodStateTag" class="px-2 py-0.5 bg-[#ff1a40] text-white border border-black rotate-[-1deg] font-black text-xs">
+                <div id="bloodStateTag" class="px-2 py-0.5 bg-[#ff1a40] text-white border border-black rotate-[-1deg] font-black text-[11px] sm:text-xs">
                     동맥혈 (선홍색 / O₂)
                 </div>
-                <div class="flex items-center gap-1.5 font-black text-xs">
-                    <span class="bg-yellow-100 px-2 py-0.5 border border-black rounded">
+                <div class="flex items-center gap-1 font-black text-xs">
+                    <span class="bg-yellow-100 px-1.5 py-0.5 border border-black rounded text-[11px] sm:text-xs">
                         순환: <b id="lapCountText" class="text-blue-700 text-sm">0</b>회
                     </span>
-                    <span class="bg-yellow-100 px-2 py-0.5 border border-black rounded">
+                    <span class="bg-yellow-100 px-1.5 py-0.5 border border-black rounded text-[11px] sm:text-xs">
                         길이: <b id="snakeLengthText" class="text-red-600 text-sm">3</b>
                     </span>
                 </div>
             </div>
         </header>
 
-        <!-- 2. 순환 경로 및 다음 목적지 대시보드 (모바일 콤팩트 가로 2행) -->
+        <!-- 2. 다음 목적지 배너 & 접이식 순환도 (기본 접힘으로 캔버스 화면 2배 확보) -->
         <section class="flex-none flex flex-col gap-1 py-1 border-b border-gray-300">
-            <!-- 다음 목적지 강조 배너 -->
+            <!-- 목적지 배너 + 순환도 토글 버튼 -->
             <div class="flex items-center justify-between bg-[#fffdf0] px-2 py-1 border-2 border-black rounded shadow-[2px_2px_0px_#000]">
                 <div class="flex items-center gap-1.5 min-w-0">
-                    <span class="text-xs font-black text-gray-700 shrink-0">★ 다음 목표:</span>
-                    <span id="targetHintLabel" class="text-xl sm:text-2xl text-red-600 font-black tracking-wide underline decoration-wavy truncate">
+                    <span class="text-xs font-black text-gray-700 shrink-0">★ 다음:</span>
+                    <span id="targetHintLabel" class="text-xl text-red-600 font-black tracking-wide underline decoration-wavy truncate">
                         대동맥
                     </span>
+                    <span id="guideModeComment" class="text-[11px] font-bold text-blue-900 truncate hidden xs:inline">
+                        (좌심실 ➔ 대동맥)
+                    </span>
                 </div>
-                <div id="guideModeComment" class="text-xs font-bold text-blue-900 truncate pl-1">
-                    좌심실 ➔ 대동맥 먹으러 이동!
-                </div>
+                <button id="toggleMapBtn" class="paint-btn px-2 py-0.5 text-xs font-black bg-yellow-100 hover:bg-yellow-200 shrink-0 ml-1">
+                    🗺️ 순환도 <span id="toggleMapArrow">▼</span>
+                </button>
             </div>
 
-            <!-- 10단계 콤팩트 순환 맵 (온몸순환 상단 + 허파순환 하단) -->
-            <div id="circulationMapArea" class="flex flex-col gap-0.5">
-                <!-- 온몸순환 구역 (좌심실 ~ 우심방) -->
-                <div class="bg-red-50/90 border border-black px-1.5 py-0.5 rounded">
+            <!-- 10단계 순환 맵 (필요할 때만 터치해서 열어보는 접이식 패널) -->
+            <div id="circulationMapArea" class="hidden flex flex-col gap-1 pt-0.5">
+                <!-- 온몸순환 구역 -->
+                <div class="bg-red-50 border border-black px-1.5 py-0.5 rounded">
                     <div class="flex items-center justify-between text-[11px] font-black text-red-800 leading-none mb-0.5">
                         <span>[온몸순환: 좌심실 ➔ 우심방]</span>
                         <span class="text-[10px] text-red-700 font-bold">산소 공급</span>
@@ -147,8 +149,8 @@
                     </div>
                 </div>
 
-                <!-- 허파순환 구역 (우심실 ~ 좌심방) -->
-                <div class="bg-blue-50/90 border border-black px-1.5 py-0.5 rounded">
+                <!-- 허파순환 구역 -->
+                <div class="bg-blue-50 border border-black px-1.5 py-0.5 rounded">
                     <div class="flex items-center justify-between text-[11px] font-black text-blue-800 leading-none mb-0.5">
                         <span>[허파순환: 우심실 ➔ 좌심방]</span>
                         <span class="text-[10px] text-blue-700 font-bold">산소 충전</span>
@@ -164,13 +166,13 @@
             </div>
 
             <!-- 암기 모드 안내 배너 -->
-            <div id="blindModeNotice" class="hidden text-center text-xs font-black text-purple-900 bg-purple-100 border border-purple-600 py-0.5 px-1.5 rounded">
+            <div id="blindModeNotice" class="hidden text-center text-xs font-black text-purple-900 bg-purple-100 border border-purple-600 py-0.5 px-1 rounded">
                 🧠 2회차 암기 모드: 다음 목적지 힌트 효과가 꺼졌습니다!
             </div>
         </section>
 
-        <!-- 3. 중앙: 게임 캔버스 (정사각형, 화면 폭에 맞춰 자동 확장) -->
-        <main class="flex-1 flex items-center justify-center relative min-h-0 py-1 overflow-hidden">
+        <!-- 3. 중앙: 대폭 확대된 초대형 정사각형 캔버스 (화면 너비 100% 꽉 채움) -->
+        <main class="flex-1 w-full flex items-center justify-center relative min-h-0 py-1 overflow-hidden">
             <canvas id="snakeCanvas" width="630" height="630" class="canvas-frame max-h-full max-w-full aspect-square object-contain"></canvas>
 
             <!-- 시작/게임오버 오버레이 모달 -->
@@ -203,37 +205,37 @@
                         <div id="submitStatusText" class="text-[11px] font-bold mt-1 text-gray-600"></div>
                     </div>
 
-                    <button id="startBtn" class="paint-btn w-full py-2 sm:py-2.5 text-base font-black bg-[#33ff66] hover:bg-[#22ee55] rounded">
+                    <button id="startBtn" class="paint-btn w-full py-2.5 text-base font-black bg-[#33ff66] hover:bg-[#22ee55] rounded">
                         순환 시작하기 (터치 / Space)
                     </button>
                 </div>
             </div>
         </main>
 
-        <!-- 4. 하단: 모바일 엄지 최적화 대형 십자키패드 (스와이프 + 탭 겸용) -->
-        <footer class="flex-none flex items-center justify-center pt-1 pb-0.5">
-            <div class="inline-grid grid-cols-3 grid-rows-3 gap-1.5 p-1.5 bg-gray-100 border-2 border-black rounded-xl shadow-[2px_2px_0px_#000]">
+        <!-- 4. 하단: 엄지 조작 최적화 콤팩트 키패드 (스와이프 + 탭 겸용) -->
+        <footer class="flex-none flex items-center justify-center pt-0.5 pb-0.5">
+            <div class="inline-grid grid-cols-3 grid-rows-3 gap-1 p-1 bg-gray-100 border-2 border-black rounded-lg shadow-[2px_2px_0px_#000]">
                 <!-- row 1 -->
                 <div></div>
-                <button id="btnUp" class="paint-btn w-14 h-11 sm:w-16 sm:h-12 text-2xl font-black flex items-center justify-center bg-white active:bg-yellow-200 rounded">
+                <button id="btnUp" class="paint-btn w-13 h-10 sm:w-15 sm:h-11 text-2xl font-black flex items-center justify-center bg-white active:bg-yellow-200 rounded">
                     ▲
                 </button>
                 <div></div>
 
                 <!-- row 2 -->
-                <button id="btnLeft" class="paint-btn w-14 h-11 sm:w-16 sm:h-12 text-2xl font-black flex items-center justify-center bg-white active:bg-yellow-200 rounded">
+                <button id="btnLeft" class="paint-btn w-13 h-10 sm:w-15 sm:h-11 text-2xl font-black flex items-center justify-center bg-white active:bg-yellow-200 rounded">
                     ◀
                 </button>
-                <div class="w-14 h-11 sm:w-16 sm:h-12 flex items-center justify-center font-bold text-gray-300 text-lg">
+                <div class="w-13 h-10 sm:w-15 sm:h-11 flex items-center justify-center font-bold text-gray-300 text-sm">
                     ✚
                 </div>
-                <button id="btnRight" class="paint-btn w-14 h-11 sm:w-16 sm:h-12 text-2xl font-black flex items-center justify-center bg-white active:bg-yellow-200 rounded">
+                <button id="btnRight" class="paint-btn w-13 h-10 sm:w-15 sm:h-11 text-2xl font-black flex items-center justify-center bg-white active:bg-yellow-200 rounded">
                     ▶
                 </button>
 
                 <!-- row 3 -->
                 <div></div>
-                <button id="btnDown" class="paint-btn w-14 h-11 sm:w-16 sm:h-12 text-2xl font-black flex items-center justify-center bg-white active:bg-yellow-200 rounded">
+                <button id="btnDown" class="paint-btn w-13 h-10 sm:w-15 sm:h-11 text-2xl font-black flex items-center justify-center bg-white active:bg-yellow-200 rounded">
                     ▼
                 </button>
                 <div></div>
@@ -346,6 +348,8 @@
         const restartHeaderBtn = document.getElementById('restartHeaderBtn');
         const circulationMapArea = document.getElementById('circulationMapArea');
         const blindModeNotice = document.getElementById('blindModeNotice');
+        const toggleMapBtn = document.getElementById('toggleMapBtn');
+        const toggleMapArrow = document.getElementById('toggleMapArrow');
 
         let snake = [];
         let currentStepIndex = 0;
@@ -413,6 +417,23 @@
         const submitRecordBtn = document.getElementById('submitRecordBtn');
         const submitStatusText = document.getElementById('submitStatusText');
 
+        // 순환도 접기/펼치기 토글
+        let isMapOpen = false;
+        if (toggleMapBtn) {
+            toggleMapBtn.addEventListener('click', () => {
+                isMapOpen = !isMapOpen;
+                if (isMapOpen) {
+                    circulationMapArea.classList.remove('hidden');
+                    toggleMapArrow.textContent = '▲';
+                    toggleMapBtn.classList.add('bg-yellow-300');
+                } else {
+                    circulationMapArea.classList.add('hidden');
+                    toggleMapArrow.textContent = '▼';
+                    toggleMapBtn.classList.remove('bg-yellow-300');
+                }
+            });
+        }
+
         // --- 스폰 함수 ---
         function getAvailableEmptyCells() {
             const occupied = new Set();
@@ -464,8 +485,8 @@
 
             if (laps >= 1) {
                 targetHintLabel.textContent = "???";
-                targetHintLabel.className = "text-xl sm:text-2xl text-purple-700 font-black";
-                guideModeComment.textContent = `현재: [${currentStep.name}] | 다음 순서를 스스로 기억하세요!`;
+                targetHintLabel.className = "text-xl text-purple-700 font-black";
+                guideModeComment.textContent = `(현재: ${currentStep.name} | 기억해서 찾기!)`;
                 blindModeNotice.classList.remove('hidden');
 
                 document.querySelectorAll('.step-card').forEach(card => {
@@ -473,8 +494,8 @@
                 });
             } else {
                 targetHintLabel.textContent = nextStep.name;
-                targetHintLabel.className = "text-xl sm:text-2xl text-red-600 font-black underline decoration-wavy truncate";
-                guideModeComment.textContent = `현재: [${currentStep.name}] ➔ 다음: [${nextStep.name}] 먹기!`;
+                targetHintLabel.className = "text-xl text-red-600 font-black underline decoration-wavy truncate";
+                guideModeComment.textContent = `(${currentStep.name} ➔ ${nextStep.name})`;
                 blindModeNotice.classList.add('hidden');
 
                 document.querySelectorAll('.step-card').forEach(card => {
@@ -490,11 +511,11 @@
             }
 
             if (currentStep.isArtery) {
-                bloodStateTag.textContent = "동맥혈 (선홍색 / O₂ 빵빵)";
-                bloodStateTag.className = "px-2 py-0.5 bg-[#ff1a40] text-white border border-black rotate-[-1deg] font-black text-xs shadow";
+                bloodStateTag.textContent = "동맥혈 (선홍색 / O₂)";
+                bloodStateTag.className = "px-2 py-0.5 bg-[#ff1a40] text-white border border-black rotate-[-1deg] font-black text-[11px] sm:text-xs shadow";
             } else {
                 bloodStateTag.textContent = "정맥혈 (암적색 / 산소 방전)";
-                bloodStateTag.className = "px-2 py-0.5 bg-[#4a152d] text-yellow-300 border border-black rotate-[1deg] font-black text-xs shadow";
+                bloodStateTag.className = "px-2 py-0.5 bg-[#4a152d] text-yellow-300 border border-black rotate-[1deg] font-black text-[11px] sm:text-xs shadow";
             }
 
             lapCountText.textContent = laps;
